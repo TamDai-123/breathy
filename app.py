@@ -76,12 +76,13 @@ def get_family_qr():
 
 def get_symptoms_qr():
     return QuickReply(items=[
+        QuickReplyButton(action=MessageAction(label="ถัดไป", text="symptom:done")),
         QuickReplyButton(action=MessageAction(label="ไอ", text="อาการ:ไอ")),
         QuickReplyButton(action=MessageAction(label="จาม", text="อาการ:จาม")),
         QuickReplyButton(action=MessageAction(label="หายใจมีเสียงวี้ด", text="อาการ:หายใจมีเสียงวี้ด")),
         QuickReplyButton(action=MessageAction(label="แน่นหน้าอก", text="อาการ:แน่นหน้าอก")),
-        QuickReplyButton(action=MessageAction(label="เหนื่อยง่าย", text="อาการ:เหนื่อยง่าย")),
-        QuickReplyButton(action=MessageAction(label="ถัดไป", text="symptom:done"))
+        QuickReplyButton(action=MessageAction(label="เหนื่อยง่าย", text="อาการ:เหนื่อยง่าย"))
+        
     ])
 
 def get_city_qr():

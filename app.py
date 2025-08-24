@@ -141,7 +141,7 @@ def handle_message(event):
         r.delete(user_id)
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="🔄 รีเซ็ตข้อมูลเรียบร้อยแล้ว\nพิมพ์ 'ประเมิน' เพื่อเริ่มใหม่")
+            TextSendMessage(text="🔄 รีเซ็ตข้อมูลเรียบร้อยแล้ว\nพิมพ์ 'ประเมิน' เพื่อเริ่มใหม่ ครับ/ค่ะ")
         )
         return
 
@@ -149,13 +149,13 @@ def handle_message(event):
     if is_close_match(text, ["ประเมิน", "ประเมิณ"]):
         user_data = {"step":"age","age":None,"smoker":None,"family":None,"symptoms":[]}
         r.set(user_id, json.dumps(user_data))
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="กรุณาใส่อายุของคุณ (ตัวเลข):"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="กรุณาใส่อายุของคุณ (ตัวเลข) ครับ/ค่ะ:"))
         return
 
     # ---------------- LOAD SESSION ----------------
     data_json = r.get(user_id)
     if not data_json:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="พิมพ์ 'ประเมิน' เพื่อเริ่มทำแบบสอบถาม"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="พิมพ์ 'ประเมิน' เพื่อเริ่มทำแบบสอบถาม ครับ/ค่ะ"))
         return
     user_data = json.loads(data_json)
     step = user_data.get("step")
@@ -166,9 +166,9 @@ def handle_message(event):
             user_data["age"]=int(text)
             user_data["step"]="smoker"
             r.set(user_id, json.dumps(user_data))
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="คุณสูบบุหรี่หรือไม่?", quick_reply=get_smoker_qr()))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="คุณสูบบุหรี่หรือไม่ ครับ/ค่ะ", quick_reply=get_smoker_qr()))
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="❌ กรุณาใส่อายุเป็นตัวเลขอีกครั้ง"))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="❌ กรุณาใส่อายุเป็นตัวเลขอีกครั้ง ครับ/ค่ะ"))
         return
 
     # ----- STEP SMOKER -----
@@ -180,14 +180,14 @@ def handle_message(event):
         else:
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="❌ กรุณาเลือกจากตัวเลือก", quick_reply=get_smoker_qr())
+                TextSendMessage(text="❌ กรุณาเลือกจากตัวเลือก ครับ/ค่ะ", quick_reply=get_smoker_qr())
             )
             return
         user_data["step"] = "family"
         r.set(user_id, json.dumps(user_data))
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="ครอบครัวของคุณมีประวัติหอบหืดหรือไม่?", quick_reply=get_family_qr())
+            TextSendMessage(text="ครอบครัวของคุณมีประวัติหอบหืดหรือไม่ ครับ/ค่ะ", quick_reply=get_family_qr())
         )
         return
 
@@ -200,7 +200,7 @@ def handle_message(event):
         else:
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="❌ กรุณาเลือกจากตัวเลือก", quick_reply=get_family_qr())
+                TextSendMessage(text="❌ กรุณาเลือกจากตัวเลือก ครับ/ค่ะ", quick_reply=get_family_qr())
             )
             return
         user_data["step"] = "symptoms"
@@ -208,7 +208,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text="เลือกอาการของคุณ (เลือกได้หลายครั้ง กด 'ถัดไป' เมื่อเสร็จ):",
+                text="เลือกอาการของคุณ (เลือกได้หลายครั้ง แต่ถ้าไม่มีอาการให้กด 'ถัดไป') ครับ/ค่ะ:",
                 quick_reply=get_symptoms_qr()
             )
         )
@@ -221,7 +221,7 @@ def handle_message(event):
             if symptom and symptom not in user_data["symptoms"]:
                 user_data["symptoms"].append(symptom)
             r.set(user_id, json.dumps(user_data))
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f"✅ เพิ่มอาการ: {symptom}\nเลือกอาการอื่นต่อ หรือกด 'ถัดไป' เมื่อเสร็จ:", quick_reply=get_symptoms_qr()))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f"✅ เพิ่มอาการ: {symptom}\nเลือกอาการอื่นต่อ หรือกด 'ถัดไป' เมื่อเสร็จ ครับ/ค่ะ: ", quick_reply=get_symptoms_qr()))
             return
         elif is_close_match(text, ["symptom:done","ถัดไป","เสร็จสิ้น"]):
             user_data["step"]="city"
@@ -229,7 +229,7 @@ def handle_message(event):
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="เลือกเมืองที่จะไป:", quick_reply=get_city_qr()))
             return
         else:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="❌ กรุณาเลือกอาการจากตัวเลือก หรือกด 'ถัดไป'", quick_reply=get_symptoms_qr()))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="❌ กรุณาเลือกอาการจากตัวเลือก หรือกด 'ถัดไป' ครับ/ค่ะ", quick_reply=get_symptoms_qr()))
             return
 
     # ----- STEP CITY -----

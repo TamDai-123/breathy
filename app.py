@@ -208,7 +208,7 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(
-                text="เลือกอาการของคุณ (เลือกได้หลายครั้ง แต่ถ้าไม่มีอาการให้กด 'ถัดไป') ครับ/ค่ะ:",
+                text="เลือกอาการของคุณ หรือในกรณีที่ไม่มีอาการ ให้กดปุ่ม “ถัดไป” เพื่อเข้าสู่ขั้นตอนถัดไป ครับ/ค่ะ:",
                 quick_reply=get_symptoms_qr()
             )
         )
@@ -221,12 +221,12 @@ def handle_message(event):
             if symptom and symptom not in user_data["symptoms"]:
                 user_data["symptoms"].append(symptom)
             r.set(user_id, json.dumps(user_data))
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f"✅ เพิ่มอาการ: {symptom}\nเลือกอาการอื่นต่อ หรือกด 'ถัดไป' เมื่อเสร็จ ครับ/ค่ะ: ", quick_reply=get_symptoms_qr()))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f"✅ เพิ่มอาการ: {symptom}\nเลือกอาการอื่นต่อ หรือในกรณีที่ไม่มีอาการอื่น ให้กดปุ่ม “ถัดไป” เพื่อเข้าสู่ขั้นตอนถัดไป ครับ/ค่ะ: ", quick_reply=get_symptoms_qr()))
             return
         elif is_close_match(text, ["symptom:done","ถัดไป","เสร็จสิ้น"]):
             user_data["step"]="city"
             r.set(user_id, json.dumps(user_data))
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="เลือกเมืองที่จะไป:", quick_reply=get_city_qr()))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="เลือกเมืองที่จะไป ครับ/ค่ะ:", quick_reply=get_city_qr()))
             return
         else:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(text="❌ กรุณาเลือกอาการจากตัวเลือก หรือกด 'ถัดไป' ครับ/ค่ะ", quick_reply=get_symptoms_qr()))
